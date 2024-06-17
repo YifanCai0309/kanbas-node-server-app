@@ -42,12 +42,10 @@ export default function ModuleRoutes(app) {
   app.put("/api/modules/:mid", async (req, res) => {
     try {
       const { mid } = req.params;
-      const status = await dao.updateModule(mid, req.body);
-      status.modifiedCount
-        ? res.json(status)
-        : res.status(404).json({ message: "Module not found" });
+      await dao.updateModule(mid, req.body);
+      res.sendStatus(204);
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Failed to update module" });
     }
   });
 }

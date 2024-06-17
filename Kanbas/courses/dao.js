@@ -6,21 +6,13 @@ export const createCourse = (course) => {
 };
 
 export const findAllCourses = () => model.find();
-
 export const updateCourse = async (courseId, course) => {
-  const existingCourse = await model.findById(courseId);
-  if (!existingCourse) {
-    throw new Error("Course not found");
+  if (course.name) {
+    await model.updateOne({ _id: courseId }, { $set: course });
+    return "Course updated successfully";
+  } else {
+    throw new Error("Course does not meet requirements");
   }
-
-  existingCourse.set(course);
-
-  const validationResult = existingCourse.validateSync();
-  if (validationResult) {
-    throw new Error(validationResult.errors);
-  }
-
-  return existingCourse.save();
 };
 
 export const deleteCourse = (courseId) => model.deleteOne({ _id: courseId });
