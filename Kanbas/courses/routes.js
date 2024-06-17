@@ -1,27 +1,47 @@
-import Database from "../Database/index.js";
+import * as dao from "./dao.js";
+
 export default function CourseRoutes(app) {
-  app.post("/api/courses", (req, res) => {
-    const course = { ...req.body, _id: new Date().getTime().toString() };
-    Database.courses.push(course);
-    res.send(course);
+  app.post("/api/courses", async (req, res) => {
+    try {
+      const course = { ...req.body, _id: new Date().getTime().toString() };
+      await dao.createCourse(course);
+      res.send(course);
+    } catch (err) {
+      console.error("Error creating course:", err);
+      res.status(500).send("Failed to create course.");
+    }
   });
 
-  app.get("/api/courses", (req, res) => {
-    const courses = Database.courses;
-    res.send(courses);
+  app.get("/api/courses", async (req, res) => {
+    try {
+      const courses = await dao.findAllCourses();
+      res.send(courses);
+    } catch (err) {
+      console.error("Error fetching courses:", err);
+      res.status(500).send("Failed to fetch courses.");
+    }
   });
 
-  app.delete("/api/courses/:id", (req, res) => {
-    const { id } = req.params;
-    Database.courses = Database.courses.filter((c) => c._id !== id);
-    res.sendStatus(204);
+  app.delete("/api/courses/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      await dao.deleteCourse(id);
+      res.sendStatus(204);
+    } catch (err) {
+      console.error("Error deleting course:", err);
+      res.status(500).send("Failed to delete course.");
+    }
   });
-  app.put("/api/courses/:id", (req, res) => {
-    const { id } = req.params;
-    const course = req.body;
-    Database.courses = Database.courses.map((c) =>
-      c._id === id ? { ...c, ...course } : c
-    );
-    res.sendStatus(204);
+
+  app.put("/api/courses/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const course = req.body;
+      await dao.updateCourse(id, course);
+      res.sendStatus(204);
+    } catch (err) {
+      console.error("Error updating course:", err);
+      res.status(500).send("Failed to update course.");
+    }
   });
 }
