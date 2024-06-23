@@ -34,8 +34,12 @@ export default function UserRoutes(app) {
   };
   const updateUser = async (req, res) => {
     const { userId } = req.params;
-    const status = await dao.updateUser(userId, req.body);
-    res.json(status);
+    try {
+      const status = await dao.updateUser(userId, req.body);
+      res.json(status);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   };
 
   const signup = async (req, res) => {
@@ -74,6 +78,26 @@ export default function UserRoutes(app) {
     res.json(currentUser);
   };
 
+  const addCourse = async (req, res) => {
+    const { userId, courseId } = req.body;
+    try {
+      const user = await dao.addCourseToUser(userId, courseId);
+      res.json(user);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+
+  const removeCourse = async (req, res) => {
+    const { userId, courseId } = req.body;
+    try {
+      const user = await dao.removeCourseFromUser(userId, courseId);
+      res.json(user);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+
   app.post("/api/users", createUser);
   app.get("/api/users", findAllUsers);
   app.get("/api/users/:userId", findUserById);
@@ -83,4 +107,7 @@ export default function UserRoutes(app) {
   app.post("/api/users/signin", signin);
   app.post("/api/users/signout", signout);
   app.post("/api/users/profile", profile);
+
+  app.post("/api/users/:userId/addCourse", addCourse);
+  app.post("/api/users/:userId/removeCourse", removeCourse);
 }

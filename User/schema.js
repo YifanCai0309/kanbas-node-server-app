@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
     section: String,
     lastActivity: Date,
     totalActivity: String,
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "courses" }],
   },
   { collection: "users" }
 );
