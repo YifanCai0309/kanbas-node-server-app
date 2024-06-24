@@ -62,4 +62,16 @@ export default function QuizRoutes(app) {
       res.status(500).json({ message: "Failed to update quiz" });
     }
   });
+
+  app.put("/api/quizzes/:qid/points", async (req, res) => {
+    try {
+      const { qid } = req.params;
+      const { points } = req.body;
+      await dao.updateQuizPoints(qid, points);
+      res.sendStatus(204);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Failed to update quiz points" });
+    }
+  });
 }

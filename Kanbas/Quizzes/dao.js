@@ -17,4 +17,13 @@ export const updateQuiz = async (quizId, quiz) => {
   }
 };
 
+export const updateQuizPoints = async (quizId, points) => {
+  if (points) {
+    await model.updateOne({ _id: quizId }, { $set: { points } });
+    return "Quiz points updated successfully";
+  } else {
+    throw new Error("Points are required");
+  }
+};
+
 export const deleteQuiz = (quizId) => model.deleteOne({ _id: quizId });
