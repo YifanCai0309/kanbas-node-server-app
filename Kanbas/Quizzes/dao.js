@@ -6,7 +6,7 @@ export const createQuiz = (quiz) => {
 };
 
 export const findAllQuizzes = (courseId) => model.find({ course: courseId });
-export const findQuiz = (quizId) => model.find({ quizId: quiz._id });
+export const findQuiz = (quizId) => model.findOne({ _id: quizId });
 
 export const updateQuiz = async (quizId, quiz) => {
   if (quiz.title) {

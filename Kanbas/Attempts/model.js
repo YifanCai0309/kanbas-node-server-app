@@ -1,4 +1,4 @@
 import mongoose from "mongoose";
 import schema from "./schema.js";
-const model = mongoose.model("AnswerModel", schema);
+const model = mongoose.model("AttemptModel", schema);
 export default model;
